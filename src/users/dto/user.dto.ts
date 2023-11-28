@@ -1,11 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { BaseDto } from 'src/common/dto/base.dto';
+import { IsNumber } from 'class-validator';
+import { CommonDto } from 'src/common/dto/common.dto';
 
-export class UserDto extends BaseDto {
+export class UserDto extends CommonDto {
   @ApiProperty({
     example: 1,
-    description: '사용자 아이디',
+    description: '사용자 고유번호',
   })
+  @IsNumber()
   userId: number;
 
   @ApiProperty({

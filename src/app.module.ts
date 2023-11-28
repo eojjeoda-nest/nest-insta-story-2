@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 import { DataSource } from 'typeorm';
-import { UsersModule } from './users/users.module';
+import { UsersModule } from './users/module/users.module';
 import { StoriesModule } from './stories/module/stories.module';
 
 @Module({
