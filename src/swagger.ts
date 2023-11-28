@@ -11,7 +11,6 @@ export function setupSwagger(app: INestApplication): void {
     .setTitle('Instagram API with JongHoon')
     .setDescription('Instagram API')
     .setVersion('1.0')
-    .addTag('Instagram')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
