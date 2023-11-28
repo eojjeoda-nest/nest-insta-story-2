@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { BaseDto } from 'src/common/dto/base.dto';
+import { CommonDto } from 'src/common/dto/common.dto';
 
-export class StoryDto extends BaseDto {
+export class StoryDto extends CommonDto {
   @ApiProperty({
     example: 1,
     description: '스토리 아이디',

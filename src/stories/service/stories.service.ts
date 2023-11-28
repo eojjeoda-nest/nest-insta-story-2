@@ -5,7 +5,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { HashtagEntity } from '../entities/hashtag.entity';
-import { CreateStoryResponseDto } from '../dto/response.dto';
+import {
+  CreateStoryResponseDto,
+  getStoryPaginationResponseDto,
+} from '../dto/response.dto';
 
 @Injectable()
 export class StoriesService {
@@ -58,6 +61,34 @@ export class StoriesService {
     }
   }
 
+  async getPage(page: number, limit: number) {
+    const stories = await this.storyEntityRepository.find({
+      skip: (page - 1) * limit,
+      take: limit,
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+
+    const content: CreateStoryResponseDto[] = stories.map((story) => ({
+      storyId: story.storyId,
+      createdAt: story.createdAt,
+      validTime: story.validTime,
+      title: story.title,
+      author: story.author,
+      image: story.image,
+      hashtags: story.hashtags?.map((hashtag) => hashtag.hashtagName),
+    }));
+
+    const data: getStoryPaginationResponseDto = {
+      content: content,
+      page: page,
+      limit: limit,
+      totalPage: Math.ceil(stories.length / limit),
+    };
+
+    return data;
+  }
   // findAll() {
   //   return `This action returns all stories`;
   // }
