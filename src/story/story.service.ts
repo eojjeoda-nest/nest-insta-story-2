@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { CreateStoryDto } from './dto/create-story.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Story } from './entity/story.entity';
-import { Repository } from 'typeorm';
+import { MoreThan, Repository } from 'typeorm';
 import { Hashtag } from '../hashtag/entity/hashtag.entity';
 import { StoryMapper } from './dto/story.mapper.dto';
+import { StoryPaginationDto } from './dto/story-pagination.dto';
 
 @Injectable()
 export class StoryService {
@@ -26,11 +27,7 @@ export class StoryService {
   async createStory(createStoryDto: CreateStoryDto) {
     const story: Story = this.storyMapper.dtoToEntity(createStoryDto);
 
-    const hashtags = createStoryDto.hashtags
-      .split(' ')
-      .filter((tag) => tag.startsWith('#')) // '#'으로 시작하는 태그만 필터링
-      .map((tag) => tag.trim()); // 공백 제거
-    const uniqueHashtags = Array.from(new Set(hashtags));
+    const uniqueHashtags = Array.from(new Set(createStoryDto.hashtags));
 
     story.hashtags = await Promise.all(
       uniqueHashtags.map(async (tag) => {
@@ -46,6 +43,24 @@ export class StoryService {
       }),
     );
 
-    return this.storyRepository.save(story);
+    const savedStory: Story = await this.storyRepository.save(story);
+
+    // 매퍼를 사용하여 응답 객체 생성
+    return StoryMapper.entityToResponse(savedStory);
+  }
+
+  async findStories({ page, limit }: StoryPaginationDto): Promise<any> {
+    const currentTime = new Date();
+    const [stories, total] = await this.storyRepository.findAndCount({
+      where: {
+        expirationTime: MoreThan(currentTime),
+      },
+      relations: ['hashtags'],
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+
+    // 매퍼를 사용하여 응답 객체 생성
+    return StoryMapper.responseToPaginationArray(stories, total, page, limit);
   }
 }

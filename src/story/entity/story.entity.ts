@@ -21,12 +21,15 @@ export class Story extends Timestamp {
 
   // 현재 로그인한 유저의 이름을 가져온다고 가정하므로 nickname column 생성
   @Column({ name: 'nickname', type: 'varchar', nullable: false })
-  nickname: string;
+  author: string;
 
   @ManyToMany(() => Hashtag)
   @JoinTable()
   hashtags: Hashtag[];
 
-  @Column({ name: 'expirationTime', type: 'date', nullable: false })
+  @Column({ name: 'validTime', type: 'int', nullable: false })
+  validTime: number;
+
+  @Column({ name: 'expirationTime', type: 'timestamp', nullable: false })
   expirationTime: Date;
 }
