@@ -19,4 +19,8 @@ export class HashtagEntity extends BaseEntity {
   @ManyToMany(() => StoryEntity, (story) => story.hashtags)
   @JoinTable()
   stories: StoryEntity[];
+
+  createHashtag(hashtagName: string) {
+    this.hashtagName = hashtagName;
+  }
 }
