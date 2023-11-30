@@ -16,7 +16,8 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
-      whitelist: true,
+      // TODO: 왜 이거 적용하면 데이터 받을 때, undefined로 받는지?
+      // whitelist: true,
       stopAtFirstError: true,
     }),
   );
