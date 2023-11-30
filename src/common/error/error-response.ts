@@ -1,20 +1,25 @@
 import { HttpException } from '@nestjs/common';
 
 export class ErrorResponse {
-  public status: number;
-  public code: string;
-  public message: string;
+  statusCode: number;
+  message: string;
 
   constructor(exception: HttpException) {
-    this.status = exception.getStatus();
-    this.code = exception.getResponse()['error'];
-    this.message = exception.getResponse()['message'];
+    this.statusCode = exception.getStatus();
+    this.message = this.messageTypeCheck(exception.getResponse());
+  }
+
+  messageTypeCheck(exceptionResponse: string | object) {
+    if (typeof exceptionResponse === 'string') {
+      return exceptionResponse;
+    } else {
+      return exceptionResponse['message'][0];
+    }
   }
 
   toJson() {
     return {
-      status: this.status,
-      code: this.code,
+      statusCode: this.statusCode,
       message: this.message,
     };
   }
