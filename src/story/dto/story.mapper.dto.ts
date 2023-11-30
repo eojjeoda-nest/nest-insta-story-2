@@ -1,8 +1,10 @@
 import { CreateStoryDto } from './create-story.dto';
 import { Story } from '../entity/story.entity';
+import { CreateStoryResponseDto } from './create-story-response.dto';
+import { ReadStoryResponseDto } from './read-story-response.dto';
 
 export class StoryMapper {
-  static entityToResponse(story: Story): any {
+  static entityToResponse(story: Story): CreateStoryResponseDto {
     return {
       id: story.id,
       createdAt: story.createdAt,
@@ -19,7 +21,7 @@ export class StoryMapper {
     total: number,
     page?: number,
     limit?: number,
-  ): any {
+  ): ReadStoryResponseDto {
     const data = stories.map((story) => ({
       id: story.id,
       createdAt: story.createdAt,

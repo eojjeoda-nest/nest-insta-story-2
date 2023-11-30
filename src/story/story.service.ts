@@ -6,6 +6,7 @@ import { MoreThan, Repository } from 'typeorm';
 import { Hashtag } from '../hashtag/entity/hashtag.entity';
 import { StoryMapper } from './dto/story.mapper.dto';
 import { StoryPaginationDto } from './dto/story-pagination.dto';
+import { ReadStoryResponseDto } from './dto/read-story-response.dto';
 
 @Injectable()
 export class StoryService {
@@ -49,13 +50,24 @@ export class StoryService {
     return StoryMapper.entityToResponse(savedStory);
   }
 
-  async findStories({ page, limit }: StoryPaginationDto): Promise<any> {
+  /**
+   * 스토리 조회 API:
+   * 스토리를 조회하는 시점으로부터`12시간 | 24시간 이전`에 생성된 스토리만 조회할 수 있다.
+   * 스토리 조회 시, `해시태그`의 정보를 함께 조회할 수 있다.
+   */
+  async findStories({
+    page,
+    limit,
+  }: StoryPaginationDto): Promise<ReadStoryResponseDto> {
     const currentTime = new Date();
     const [stories, total] = await this.storyRepository.findAndCount({
       where: {
         expirationTime: MoreThan(currentTime),
       },
       relations: ['hashtags'],
+      order: {
+        id: 'DESC',
+      },
       skip: (page - 1) * limit,
       take: limit,
     });
