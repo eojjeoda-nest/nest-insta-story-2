@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateStoryDto } from './dto/create-story.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Story } from './entity/story.entity';
@@ -59,6 +59,14 @@ export class StoryService {
     page,
     limit,
   }: StoryPaginationDto): Promise<ReadStoryResponseDto> {
+    // 페이지와 리미트 값이 유효한지 검사
+    if (page < 1) {
+      throw new BadRequestException('페이지 번호는 1 이상이어야 합니다.');
+    }
+    if (limit < 1) {
+      throw new BadRequestException('리미트는 1 이상이어야 합니다.');
+    }
+
     const currentTime = new Date();
     const [stories, total] = await this.storyRepository.findAndCount({
       where: {
@@ -71,6 +79,14 @@ export class StoryService {
       skip: (page - 1) * limit,
       take: limit,
     });
+
+    // 요청된 페이지가 실제 페이지 수를 초과한 경우 에러 처리
+    const totalPages = Math.ceil(total / limit);
+    if (page > totalPages) {
+      throw new BadRequestException(
+        '요청된 페이지가 총 페이지 수를 초과했습니다.',
+      );
+    }
 
     // 매퍼를 사용하여 응답 객체 생성
     return StoryMapper.responseToPaginationArray(stories, total, page, limit);
