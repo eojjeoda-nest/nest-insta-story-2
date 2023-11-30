@@ -1,7 +1,7 @@
 import { IntersectionType, PickType } from '@nestjs/swagger';
 import { StoryDto } from './story.dto';
 import { UserDto } from 'src/users/dto/user.dto';
-import { PageDto } from 'src/common/dto/page.dto';
+import { PageResponseDto } from 'src/common/dto/page.dto';
 
 export class CreateStoryRequestDto extends IntersectionType(
   PickType(StoryDto, [
@@ -14,7 +14,16 @@ export class CreateStoryRequestDto extends IntersectionType(
   PickType(UserDto, ['userId'] as const),
 ) {}
 
-export class getStoryPaginationRequestDto extends PickType(PageDto, [
+// export class CreateStoryRequestDto {
+//   title: string;
+//   author: string;
+//   hashtags: string[];
+//   image: string;
+//   validTime: number;
+//   userId: number;
+// }
+
+export class getStoryPaginationRequestDto extends PickType(PageResponseDto, [
   'page',
   'limit',
 ] as const) {}

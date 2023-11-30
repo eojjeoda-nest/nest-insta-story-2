@@ -1,6 +1,6 @@
 import { PickType } from '@nestjs/swagger';
 import { StoryDto } from './story.dto';
-import { PageDto } from 'src/common/dto/page.dto';
+import { PageResponseDto } from 'src/common/dto/page.dto';
 
 export class CreateStoryResponseDto extends PickType(StoryDto, [
   'storyId',
@@ -12,6 +12,6 @@ export class CreateStoryResponseDto extends PickType(StoryDto, [
   'hashtags',
 ] as const) {}
 
-export class getStoryPaginationResponseDto extends PageDto<
+export class getStoryPaginationResponseDto extends PageResponseDto<
   CreateStoryResponseDto[]
 > {}
