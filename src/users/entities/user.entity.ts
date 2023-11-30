@@ -13,7 +13,8 @@ export class UserEntity extends BaseEntity {
   @OneToMany(() => StoryEntity, (storyEntity) => storyEntity.creator)
   stories: StoryEntity[];
 
-  createUser(userName: string) {
+  constructor(userName: string) {
+    super();
     this.userName = userName;
   }
 }

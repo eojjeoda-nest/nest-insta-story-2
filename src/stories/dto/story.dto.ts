@@ -56,7 +56,7 @@ export class StoryDto extends CommonDto {
     description: '해시태그',
   })
   @IsNotEmpty()
-  // 이거 왜 안먹지? 배열로 받는거
+  //TODO: 이거 왜 안먹지? 배열로 받는거 / 배열일 때 유효성 검사 어떻게 하나?
   @IsString({ each: true })
   hashtags: string[];
 }

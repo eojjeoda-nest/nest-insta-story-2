@@ -20,6 +20,7 @@ export class HashtagEntity extends BaseEntity {
   @JoinTable()
   stories: StoryEntity[];
 
+  // 이렇게 하면은 setter 동일하다고 볼 수 있기 때문에
   createHashtag(hashtagName: string) {
     this.hashtagName = hashtagName;
   }

@@ -23,7 +23,9 @@ export class StoriesController {
   @ApiCreatedResponse({ type: ApiResponseWithDataDto<CreateStoryResponseDto> })
   @HttpCode(HttpStatus.CREATED)
   @Post()
-  create(@Body() createStoryRequestDto: CreateStoryRequestDto) {
+  create(
+    @Body() createStoryRequestDto: CreateStoryRequestDto,
+  ): Promise<CreateStoryResponseDto> {
     return this.storiesService.create(createStoryRequestDto);
   }
 
@@ -33,7 +35,10 @@ export class StoriesController {
     type: ApiResponseWithDataDto<PageResponseDto<CreateStoryResponseDto[]>>,
   })
   @Get('/page')
-  getPage(@Query('page') page: number, @Query('limit') limit: number) {
+  getPage(
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ): Promise<PageResponseDto<CreateStoryResponseDto[]>> {
     return this.storiesService.getPage(page, limit);
   }
 }

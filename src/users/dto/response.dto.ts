@@ -3,5 +3,6 @@ import { UserDto } from './user.dto';
 
 export class CreateUserResponseDto extends PickType(UserDto, [
   'userId',
+  'userName',
   'createdAt',
 ] as const) {}

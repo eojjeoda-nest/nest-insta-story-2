@@ -27,9 +27,6 @@ export class StoryEntity extends BaseEntity {
   @Column({ nullable: true })
   validTime: number;
 
-  // TODO: 수현님 코드 참고=> 밀리초 단위의 타임스탬프 데이터를 정확하고 안정적으로 저장하기 위함
-  // @Column('bigint')
-  // expires: number;
   @Column({ nullable: true })
   expireAt: Date;
 
@@ -42,7 +39,7 @@ export class StoryEntity extends BaseEntity {
   @JoinColumn({ name: 'userId' })
   creator: UserEntity;
 
-  createStory(
+  constructor(
     title: string,
     author: string,
     image: string,
@@ -50,6 +47,7 @@ export class StoryEntity extends BaseEntity {
     hashtags: HashtagEntity[],
     creator: UserEntity,
   ) {
+    super();
     this.title = title;
     this.author = author;
     this.image = image;

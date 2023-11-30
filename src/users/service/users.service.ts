@@ -3,6 +3,8 @@ import { CreateUserRequestDto } from '../dto/request.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../entities/user.entity';
 import { Repository } from 'typeorm';
+import { CreateUserResponseDto } from '../dto/response.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UsersService {
@@ -14,29 +16,18 @@ export class UsersService {
   async create(createUserRequestDto: CreateUserRequestDto) {
     const { userName } = createUserRequestDto;
 
-    const user = new UserEntity();
-    user.createUser(userName);
+    const user = new UserEntity(userName);
 
-    try {
-      const savedUser = await this.userEntityRepository.save(user);
-      return savedUser;
-    } catch (err) {
-      throw new Error('db error');
-    }
+    const savedUser = await this.userEntityRepository.save(user);
+
+    // const data: CreateUserResponseDto = {
+    //   userId: savedUser.userId,
+    //   userName: savedUser.userName,
+    //   createdAt: savedUser.createdAt,
+    // };
+
+    return plainToInstance(CreateUserResponseDto, savedUser, {
+      excludePrefixes: ['deletedAt', 'updatedAt'],
+    });
   }
-  // create(createUserDto: CreateUserDto) {
-  //   return 'This action adds a new user';
-  // }
-  // findAll() {
-  //   return `This action returns all users`;
-  // }
-  // findOne(id: number) {
-  //   return `This action returns a #${id} user`;
-  // }
-  // update(id: number, updateUserDto: UpdateUserDto) {
-  //   return `This action updates a #${id} user`;
-  // }
-  // remove(id: number) {
-  //   return `This action removes a #${id} user`;
-  // }
 }

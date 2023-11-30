@@ -16,8 +16,8 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
-      // TODO: 왜 이거 적용하면 데이터 받을 때, undefined로 받는지?
-      // whitelist: true,
+      // TODO: 왜 이거 적용하면 데이터 받을 때, undefined로 받는지? => class-validator 적용을 해줘야한다.
+      whitelist: true,
       stopAtFirstError: true,
     }),
   );
@@ -26,6 +26,7 @@ async function bootstrap() {
   await app.listen(process.env.PORT || 8000);
 
   console.log(`Application is running on: ${await app.getUrl()}`);
+  console.log(`Swagger is running on: ${await app.getUrl()}/docs`);
 }
 
 bootstrap();
