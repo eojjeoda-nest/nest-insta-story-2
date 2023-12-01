@@ -1,5 +1,6 @@
 import { IsArray, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { PageDto } from '../../../global/dto/page.dto';
 
 export class RequestStoryDto {
   @IsString()
@@ -33,4 +34,8 @@ export class ResponseStoryDto {
   hashtags: string[];
   validTime: number;
   createdAt: Date;
+}
+
+export class PageResponseStoriesDto extends PageDto {
+  data: ResponseStoryDto[];
 }
