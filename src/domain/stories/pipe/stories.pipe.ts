@@ -8,6 +8,7 @@ export class CreateStoriesPipe implements PipeTransform {
     this.toValidateHashtags(hashtags, set);
     this.toValidateValidTime(validTime);
     this.transformHashtagsWithOutDuplicate(value, set);
+    this.setExpireAt(value);
     return value;
   }
   // # 확인
@@ -29,6 +30,14 @@ export class CreateStoriesPipe implements PipeTransform {
   // 중복된 해쉬태그 제거
   private transformHashtagsWithOutDuplicate(value: any, set: Set<string>) {
     value.hashtags = Array.from(set);
+    return value;
+  }
+
+  // validTime에 맞춰 만료시간 설정
+  private setExpireAt(value: any) {
+    const expireTime = new Date();
+    expireTime.setHours(expireTime.getHours() + value.validTime);
+    value.expireAt = expireTime;
     return value;
   }
 }

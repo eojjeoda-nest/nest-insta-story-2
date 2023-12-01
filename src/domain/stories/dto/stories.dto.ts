@@ -22,6 +22,7 @@ export class RequestStoryDto {
   @IsNotEmpty()
   @ApiProperty({ description: 'validTime' })
   readonly validTime: number;
+  expireAt: Date;
 }
 
 export class ResponseStoryDto {

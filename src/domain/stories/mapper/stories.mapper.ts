@@ -9,6 +9,7 @@ export class StoriesMapper {
     story.author = req.author;
     story.validTime = req.validTime;
     story.hashtags = req.hashtags.toString();
+    story.expireAt = req.expireAt;
     return story;
   }
   toResponseDto(story: Story) {

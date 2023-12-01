@@ -31,6 +31,8 @@ export class Story {
     type: 'timestamp',
   })
   createdAt: Date;
+  @Column()
+  expireAt: Date;
   @DeleteDateColumn({ type: 'timestamp' })
   deletedAt?: Date | null;
 }
