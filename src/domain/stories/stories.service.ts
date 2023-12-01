@@ -15,6 +15,7 @@ export class StoriesService {
 
   async createStories(req: RequestStoryDto) {
     const story = this.storiesMapper.toEntity(req);
-    return this.storyRepository.save(story);
+    const result = await this.storyRepository.save(story);
+    return this.storiesMapper.toResponseDto(result);
   }
 }
