@@ -2,6 +2,7 @@ import { BaseEntity } from 'src/common/entities/base.entity';
 import {
   Column,
   Entity,
+  Generated,
   JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
@@ -16,12 +17,23 @@ export class HashtagEntity extends BaseEntity {
   @Column()
   hashtagName: string;
 
+  // TODO: 'increment', 'rowid' 왜 안되는지 확인하기
+  @Generated('uuid')
+  @Column()
+  hashtagIdentifier: string;
+
   @ManyToMany(() => StoryEntity, (story) => story.hashtags)
   @JoinTable()
   stories: StoryEntity[];
 
-  // 이렇게 하면은 setter 동일하다고 볼 수 있기 때문에
-  createHashtag(hashtagName: string) {
+  constructor(hashtagName: string, hashtagIdentifier?: string) {
+    super();
     this.hashtagName = hashtagName;
+    if (hashtagIdentifier) this.hashtagIdentifier = hashtagIdentifier;
   }
+
+  // 이렇게 하면은 setter 동일하다고 볼 수 있기 때문에
+  // createHashtag(hashtagName: string) {
+  //   this.hashtagName = hashtagName;
+  // }
 }

@@ -21,6 +21,8 @@ export class StoriesService {
     private storyEntityRepository: Repository<StoryEntity>,
     @InjectRepository(UserEntity)
     private userEntityRepository: Repository<UserEntity>,
+    @InjectRepository(HashtagEntity)
+    private hashtagEntityRepository: Repository<HashtagEntity>,
   ) {}
 
   async create(
@@ -38,11 +40,21 @@ export class StoriesService {
     // 답변: 400번 에러는 클라이언트가 잘못 보낸 경우에 사용한다. ( 결국 요청이 잘못된 경우 서버에서도 값을 못 찾기 때문에 )
     if (!user) throw new NotFoundException();
 
-    const hashtagsArray = hashtags?.map((hashtag) => {
-      const hashtagEntity = new HashtagEntity();
-      hashtagEntity.createHashtag(hashtag);
-      return hashtagEntity;
-    });
+    const hashtagsArray = await Promise.all(
+      hashtags?.map(async (hashtagName) => {
+        // 기존 DB에 hashtag가 있으면 가져오고, 없으면 새로 생성한다.
+        const data = await this.hashtagEntityRepository.findOne({
+          where: { hashtagName: hashtagName },
+        });
+
+        return data || new HashtagEntity(hashtagName);
+      }),
+    );
+
+    // 이 방식은 hashtags가 계속 DB에 쌓인다. ( 중복이 발생한다. )
+    // const hashtagsArray = hashtags?.map((hashtagName) => {
+    //   return new HashtagEntity(hashtagName);
+    // });
 
     const story = new StoryEntity(
       title,
@@ -88,6 +100,8 @@ export class StoriesService {
     // 유효기간이 지나지 않은 스토리만 가져온다.
     const [stories, totalCount] = await this.storyEntityRepository
       .createQueryBuilder('story')
+      // leftJoinAndSelect을 사용해야 hashtages를 가져올 수 있다. 잘 모르겟다 아직
+      .leftJoinAndSelect('story.hashtags', 'hashtags')
       .where('story.expireAt > :now', { now: new Date() })
       .orderBy('story.createdAt', 'DESC')
       .skip((page - 1) * limit)
@@ -102,6 +116,7 @@ export class StoriesService {
     //     createdAt: 'DESC',
     //   },
     // });
+    console.log(stories);
 
     // TODO: 이때 Mapper를 사용하면 될 것 같은데 맞을까?
     const content: CreateStoryResponseDto[] = stories.map((story) => ({
