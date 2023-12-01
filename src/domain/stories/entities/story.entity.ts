@@ -19,8 +19,8 @@ export class Story {
   @ApiProperty({ description: 'image' })
   image: string;
   @Column()
-  @ApiProperty({ description: 'hashTags' })
-  hashTags: string[];
+  @ApiProperty({ description: 'hashtags' })
+  hashtags: string;
   @Column()
   @ApiProperty({ description: 'author' })
   author: string;
