@@ -9,8 +9,8 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
   const options = new DocumentBuilder()
-    .setTitle('Phone verify API')
-    .setDescription('Phone verify API description')
+    .setTitle('insta story API')
+    .setDescription('insta story API description')
     .setVersion('1.0')
     .addTag('API')
     .build();
