@@ -14,6 +14,7 @@ export class StoryController {
   }
 
   @Get()
+  @HttpCode(HttpStatus.OK)
   async getStories(@Body() request: PaginationDto) {
     return await this.storyService.getStories(request);
   }
