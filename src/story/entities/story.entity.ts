@@ -20,6 +20,6 @@ export class Story {
   @Column()
   image: string;
 
-  @Column('text', { array: true })
+  @Column({ type: 'simple-array' })
   hashtags: string[];
 }
