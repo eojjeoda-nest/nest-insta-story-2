@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 import { DataSource } from 'typeorm';
 import { StoryModule } from './story/story.module';
+import { Story } from './story/entities/story.entity';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { StoryModule } from './story/story.module';
           password: process.env.DB_PASSWORD,
           database: process.env.DB_DATABASE,
           synchronize: process.env.DB_SYNC === 'true',
+          entities: [Story],
           timezone: 'Z',
         };
       },
