@@ -1,4 +1,3 @@
-import { CreateStoryRequestDto } from '../request/create-story-request.dto';
 import { Story } from '../../entities/story.entity';
 
 export class CreateStoryResponseDto {

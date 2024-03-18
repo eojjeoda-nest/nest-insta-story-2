@@ -1,5 +1,4 @@
-import { IsInt, IsString, IsUrl, Min } from 'class-validator';
-import * as url from 'url';
+import { IsInt, IsString, IsUrl } from 'class-validator';
 
 export class CreateStoryRequestDto {
 
