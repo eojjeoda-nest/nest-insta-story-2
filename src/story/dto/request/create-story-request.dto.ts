@@ -1,4 +1,4 @@
-import { IsIn, IsInt, IsString, IsUrl } from 'class-validator';
+import { IsIn, IsInt, IsString, IsUrl, Matches } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateStoryRequestDto {
@@ -32,6 +32,7 @@ export class CreateStoryRequestDto {
   image: string;
 
   @IsString({ each: true })
+  @Matches(/#[^\s#]+/g, { each: true, message: '모든 해시태그는 #으로 시작해야 합니다.' })
   @ApiProperty({
     example: ['#어쩌다', '#Nest', '#당근']
   })
