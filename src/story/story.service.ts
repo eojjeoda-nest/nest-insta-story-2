@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { CreateStoryResponseDto } from './dto/response/create-story-response.dto';
 import { PaginationDto } from '../common/dto/pagination.dto';
 import { createPaginationResult, PaginationResult } from '../common/utils/pagination.util';
+import { take } from 'rxjs';
 
 @Injectable()
 export class StoryService {
@@ -20,10 +21,15 @@ export class StoryService {
   }
 
   async getStories(dto: PaginationDto): Promise<PaginationResult<Story>> {
-    const [results, total] = await this.storyRepository.findAndCount({
-      skip: (dto.page - 1) * dto.limit,
-      take: dto.limit,
-    });
+    const currentDate = new Date();
+
+    const [results, total] = await this.storyRepository
+      .createQueryBuilder("story")
+      .where("story.createdAt > DATE_SUB(CURRENT_TIMESTAMP(), INTERVAL story.validTime HOUR)")
+      .skip((dto.page - 1) * dto.limit)
+      .take(dto.limit)
+      .getManyAndCount()
+
     return createPaginationResult(results, dto.page, dto.limit, total);
   }
 }
