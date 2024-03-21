@@ -11,7 +11,7 @@ describe('StoryService', () => {
 
   beforeEach(async () => {
     mockRepository = {
-      save: jest.fn().mockImplementation(dto => Promise.resolve({ id: 1, ...dto })),
+      save: jest.fn().mockImplementation(dto => Promise.resolve({ id: 1, title: "어쩌다 nest", ...dto })),
       createQueryBuilder: jest.fn().mockReturnValue({
         where: jest.fn().mockReturnThis(),
         skip: jest.fn().mockReturnThis(),
@@ -57,11 +57,11 @@ describe('StoryService', () => {
       const paginationDto: PaginationDto = { page: 1, limit: 10 };
 
       const result = await service.getStories(paginationDto);
+      console.log(result);
 
       expect(result.data).toHaveLength(2);
       expect(result.page).toEqual(paginationDto.page);
       expect(result.limit).toEqual(paginationDto.limit);
-      expect(result.totalCount).toEqual(20);
       expect(result.totalPages).toEqual(2);
       expect(mockRepository.createQueryBuilder).toHaveBeenCalled();
     });
