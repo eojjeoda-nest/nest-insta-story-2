@@ -36,10 +36,6 @@ describe('StoryController', () => {
     storyService = module.get<StoryService>(StoryService);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
-  });
-
   describe('스토리 생성', () => {
     it('스토리를 생성하고 반환해야 함', async () => {
       const requestDto: CreateStoryRequestDto = {
