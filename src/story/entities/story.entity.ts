@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Hashtag } from '../../hashtag/entity/hashtag.entity';
 
 @Entity()
 export class Story {
@@ -20,6 +21,7 @@ export class Story {
   @Column()
   image: string;
 
-  @Column({ type: 'simple-array' })
-  hashtags: string[];
+  @ManyToMany(() => Hashtag)
+  @JoinTable()
+  hashtags: Hashtag[];
 }

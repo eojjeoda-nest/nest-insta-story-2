@@ -17,7 +17,7 @@ export class CreateStoryResponseDto {
     dto.title = entity.title;
     dto.author = entity.author;
     dto.image = entity.image;
-    dto.hashtags = entity.hashtags;
+    dto.hashtags = entity.hashtags.map(hashtag => hashtag.hashtag);
     return dto;
   }
 }
